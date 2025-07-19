@@ -1,0 +1,206 @@
+﻿@model Dashboard
+
+ <Head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script></Head> 
+    
+
+<!-- Inline Styles -->
+<style>
+    .clickable-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .clickable-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .clickable-card .card-body {
+            padding: 20px;
+        }
+
+        .clickable-card h5 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+</style>
+
+<main id="main" class="main">
+    <div class="container-fluid mt-5">
+        <h1 class="text-center mb-4">Dashboard</h1>
+
+        <!-- Counts Section -->
+        <div class="row g-4 mb-4">
+            @foreach (var count in Model.Counts)
+            {
+                <div class="col-md-3 col-sm-6">
+                    <div class="card text-center h-100 shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">@count.Metric</h5>
+                            <hr />
+                            <p class="card-text display-6 text-primary">@count.Value</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="row g-4">
+            <!-- Quick Links Section - Centered and More Interactive -->
+            <div class="col-lg-12">
+                <div class="card h-100 shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5>Quick Links</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Grid layout for 2-3 links per row -->
+                        <div class="row">
+                            @foreach (var link in Model.NavigationLinks.Select((value, index) => new { index, value }))
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card shadow-sm clickable-card" style="cursor: pointer;" onclick="window.location.href='@Url.Action(link.value.ActionMethodName, link.value.ControllerName)'">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">
+                                                @link.value.LinkName
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Additional Sections Below Quick Links -->
+        <div class="row g-4 mt-4">
+            <!-- Recent Orders Section -->
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white">
+                        <h5>Recent 10 Orders</h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 500px;">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model.RecentOrders)
+                                {
+                                    <tr>
+                                        <td>@order.OrderID</td>
+                                        <td>@order.CustomerName</td>
+                                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                                        <td>@order.Status</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Products Section -->
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h5>Recent 10 Products</h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 500px;">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Date Added</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in Model.RecentProducts)
+                                {
+                                    <tr>
+                                        <td>@product.ProductID</td>
+                                        <td>@product.ProductName</td>
+                                        <td>@product.Category</td>
+                                        <td>@product.AddedDate.ToString("yyyy-MM-dd")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-4">
+            <!-- Top Customers Section -->
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h5>Top 10 Customers</h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 300px;">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Orders</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var customer in Model.TopCustomers)
+                                {
+                                    <tr>
+                                        <td>@customer.CustomerName</td>
+                                        <td>@customer.TotalOrders</td>
+                                        <td>@customer.Email</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Selling Products Section -->
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-danger text-white">
+                        <h5>Top 10 Selling Products</h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 300px;">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity Sold</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in Model.TopSellingProducts)
+                                {
+                                    <tr>
+                                        <td>@product.ProductName</td>
+                                        <td>@product.TotalSoldQuantity</td>
+                                        <td>@product.Category</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

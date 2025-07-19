@@ -1,0 +1,103 @@
+﻿@model ProductModel
+<style>
+    .text-teal {
+        color: #20c997 !important; /* Teal color */
+    }
+
+    .bg-teal {
+        background-color: #20c997 !important; /* Teal color */
+    }
+
+    .btn-teal {
+        background-color: #20c997;
+        border-color: #20c997;
+    }
+
+        .btn-teal:hover {
+            background-color: #1aab91;
+            border-color: #1aab91;
+        }
+</style>
+
+<main id="main" class="main bg-light">
+
+    <div class="pagetitle">
+        <h1 class="text-center text-teal">Product Form</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card border-light shadow-lg">
+                    <div class="card-header bg-teal text-white">
+                        <h5 class="card-title">Product Details</h5>
+                    </div>
+                    <div class="card-body bg-white">
+                        @using (Html.BeginForm("ProductSave", "Product", FormMethod.Post, new { onsubmit = "return confirmAddEdit();" }))
+                        {
+                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                            @Html.HiddenFor(x => x.ProductID)
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.ProductName, "Product Name:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.ProductName, new { @class = "form-control", placeholder = "Enter Product Name", aria_describedby = "productNameHelp" })
+                                @Html.ValidationMessageFor(x => x.ProductName, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.ProductPrice, "Product Price:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.ProductPrice, new { @class = "form-control", placeholder = "Enter Product Price", aria_describedby = "productPriceHelp" })
+                                @Html.ValidationMessageFor(x => x.ProductPrice, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.ProductCode, "Product Code:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.ProductCode, new { @class = "form-control", placeholder = "Enter Product Code", aria_describedby = "productCodeHelp" })
+                                @Html.ValidationMessageFor(x => x.ProductCode, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.Description, "Description:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.Description, new { @class = "form-control", placeholder = "Enter Description", rows = 4, aria_describedby = "descriptionHelp" })
+                                @Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.UserID, "Select UserName:", new { @class = "form-label fw-bold" })
+                                @* @Html.TextBoxFor(x => x.UserID, new { @class = "form-control", placeholder = "Enter User ID", aria_describedby = "userIDHelp" }) *@
+                                @* @Html.DropDownListFor(m => m.UserID, new SelectList(new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }), "Select UserID", new { @class = "form-control" }) *@
+                                <select class="form-control" asp-for="UserID">
+                                    <option value="">Select User</option>
+                                    @foreach (var user in ViewBag.UserList)
+                                    {
+                                        <option value="@user.UserID">@user.UserName</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(x => x.UserID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-teal px-4 py-2">Submit</button>
+                                <a asp-controller="Product" asp-action="ProductList" class="btn btn-secondary px-4 py-2">
+                                    Back
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+<script type="text/javascript">
+    function confirmAddEdit() {
+        return confirm("Are you sure you want to add/edit this product?");
+    }
+</script>
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

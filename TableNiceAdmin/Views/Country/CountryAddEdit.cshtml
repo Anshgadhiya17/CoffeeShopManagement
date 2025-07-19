@@ -1,0 +1,72 @@
+﻿@model CountryModel
+
+<style>
+    .text-teal {
+        color: #20c997 !important; /* Teal color */
+    }
+
+    .bg-teal {
+        background-color: #20c997 !important; /* Teal color */
+    }
+
+    .btn-teal {
+        background-color: #20c997;
+        border-color: #20c997;
+    }
+
+        .btn-teal:hover {
+            background-color: #1aab91;
+            border-color: #1aab91;
+        }
+</style>
+
+<main id="main" class="main bg-light">
+
+    <div class="pagetitle">
+        <h1 class="text-center text-teal">Country Form</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card border-light shadow-lg">
+                    <div class="card-header bg-teal text-white">
+                        <h5 class="card-title">Country Details</h5>
+                    </div>
+                    <div class="card-body bg-white">
+                        <!-- General Form Elements -->
+                        <form method="post" asp-controller="Country" asp-action="CountrySave">
+                            <input type="hidden" asp-for="CountryID" />
+
+                            <div class="mb-3">
+                                <label for="CountryName" class="form-label fw-bold">Country Name:</label>
+                                <input asp-for="CountryName" type="text" class="form-control" placeholder="Enter Country Name">
+                                <span asp-validation-for="CountryName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="CountryCode" class="form-label fw-bold">Country Code:</label>
+                                <input asp-for="CountryCode" type="text" class="form-control" placeholder="Enter Country Code">
+                                <span asp-validation-for="CountryCode" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-teal px-4 py-2">Submit</button>
+                                <a asp-controller="Country" asp-action="Country" class="btn btn-secondary px-4 py-2">
+                                    Back
+                                </a>
+                            </div>
+                        </form>
+                        <!-- End General Form Elements -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

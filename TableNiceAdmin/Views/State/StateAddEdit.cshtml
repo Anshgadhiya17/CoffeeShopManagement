@@ -1,0 +1,84 @@
+﻿@model StateModel
+
+<style>
+    .text-teal {
+        color: #20c997 !important; /* Teal color */
+    }
+
+    .bg-teal {
+        background-color: #20c997 !important; /* Teal color */
+    }
+
+    .btn-teal {
+        background-color: #20c997;
+        border-color: #20c997;
+    }
+
+        .btn-teal:hover {
+            background-color: #1aab91;
+            border-color: #1aab91;
+        }
+</style>
+
+<main id="main" class="main bg-light">
+
+    <div class="pagetitle">
+        <h1 class="text-center text-teal">State Form</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card border-light shadow-lg">
+                    <div class="card-header bg-teal text-white">
+                        <h5 class="card-title">State Details</h5>
+                    </div>
+                    <div class="card-body bg-white">
+                        <!-- General Form Elements -->
+                        <form method="post" asp-controller="State" asp-action="StateSave">
+                            <input type="hidden" asp-for="StateID" />
+
+                            <div class="mb-3">
+                                <label for="StateName" class="form-label fw-bold">State Name:</label>
+                                <input asp-for="StateName" type="text" class="form-control" placeholder="Enter State Name">
+                                <span asp-validation-for="StateName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="StateCode" class="form-label fw-bold">State Code:</label>
+                                <input asp-for="StateCode" type="text" class="form-control" placeholder="Enter State Code">
+                                <span asp-validation-for="StateCode" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="CountryID" class="form-label fw-bold">Country Name:</label>
+                                <select class="form-select" asp-for="CountryID">
+                                    <option value="">Select Country</option>
+                                    @foreach (var country in ViewBag.CountryList)
+                                    {
+                                        <option value="@country.CountryID">@country.CountryName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CountryID" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-teal px-4 py-2">Submit</button>
+                                <a asp-controller="State" asp-action="State" class="btn btn-secondary px-4 py-2">
+                                    Back
+                                </a>
+                            </div>
+                        </form>
+                        <!-- End General Form Elements -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

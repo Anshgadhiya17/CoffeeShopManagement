@@ -1,0 +1,112 @@
+﻿@model DataTable;
+@using System.Data;
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-9">
+                                <h5 class="card-title text-center">City Table</h5>
+                            </div>
+                            <div class="col text-end">
+                                <a asp-controller="City" asp-action="AddEditCity" class="btn btn-primary mt-3">
+                                    <i class="bi bi-plus-circle"></i> Add City
+                                </a>
+                            </div>
+                        </div>
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+
+                        <!-- Default Table -->
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col" class="text-center">CityID</th>
+                                    <th scope="col" class="text-center">StateID</th>
+                                    <th scope="col" class="text-center">CountryID</th>
+                                    <th scope="col" class="text-center">CityName</th>
+                                    <th scope="col" class="text-center">StateName</th>
+                                    <th scope="col" class="text-center">CountryName</th>
+                                    @* <th scope="col" class="text-center">CountryCode</th>
+                                    <th scope="col" class="text-center">StateCode</th> *@
+                                    <th scope="col" class="text-center">CityCode</th>
+                                    <th scope="col" class="text-center">Update</th>
+                                    <th scope="col" class="text-center">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (DataRow dataRow in Model.Rows)
+                                {
+                                    <tr>
+                                        <td class="border-2 text-center">
+                                            @dataRow["CityID"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["StateID"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["CountryID"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["CityName"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["StateName"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["CountryName"]
+                                        </td>
+                                        @* <td class="border-2 text-center">
+                                            @dataRow["CountryCode"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["StateCode"]
+                                        </td> *@
+                                        <td class="border-2 text-center">
+                                            @dataRow["CityCode"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            <a asp-controller="City" asp-action="AddEditCity" asp-route-CityID="@UrlEncryptor.Encrypt(dataRow["CityID"].ToString())" class="btn btn-warning">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            <a asp-controller="City" asp-action="CityDelete" asp-route-CityID="@UrlEncryptor.Encrypt(dataRow["CityID"].ToString())"
+                                               onsubmit="return confirmDelete()
+                                           class="btn btn-danger">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <!-- End Default Table Example -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+
+<script type="text/javascript">
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this City?");
+    }
+</script>

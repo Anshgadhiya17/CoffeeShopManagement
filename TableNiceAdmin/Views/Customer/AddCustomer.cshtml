@@ -1,0 +1,127 @@
+﻿@model CustomerModel
+
+<style>
+    .text-teal {
+        color: #20c997 !important; /* Teal color */
+    }
+
+    .bg-teal {
+        background-color: #20c997 !important; /* Teal color */
+    }
+
+    .btn-teal {
+        background-color: #20c997;
+        border-color: #20c997;
+    }
+
+        .btn-teal:hover {
+            background-color: #1aab91;
+            border-color: #1aab91;
+        }
+</style>
+
+<main id="main" class="main bg-light">
+
+    <div class="pagetitle">
+        <h1 class="text-center text-teal">Customer Form</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card border-light shadow-lg">
+                    <div class="card-header bg-teal text-white">
+                        <h5 class="card-title">Customer Details</h5>
+                    </div>
+                    <div class="card-body bg-white">
+                        <!-- General Form Elements -->
+                        @using (Html.BeginForm("CustomerSave", "Customer", FormMethod.Post, new { onsubmit = "return confirmAddEdit();" }))
+                        {
+                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                            @Html.HiddenFor(x => x.CustomerId)
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.CustomerName, "Enter CustomerName:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control", placeholder = "Enter CustomerName" })
+                                @Html.ValidationMessageFor(x => x.CustomerName, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.HomeAddress, "Enter HomeAddress:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.HomeAddress, new { @class = "form-control", placeholder = "Enter HomeAddress" })
+                                @Html.ValidationMessageFor(x => x.HomeAddress, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.Email, "Enter Email:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.Email, new { @class = "form-control", placeholder = "Enter Email" })
+                                @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.MobileNo, "Enter MobileNo:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.MobileNo, new { @class = "form-control", placeholder = "Enter MobileNo" })
+                                @Html.ValidationMessageFor(x => x.MobileNo, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.Gst_No, "Enter GstNo:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.Gst_No, new { @class = "form-control", placeholder = "Enter GstNo" })
+                                @Html.ValidationMessageFor(x => x.Gst_No, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.CityName, "Enter CityName:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.CityName, new { @class = "form-control", placeholder = "Enter CityName" })
+                                @Html.ValidationMessageFor(x => x.CityName, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.PinCode, "Enter PinCode:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.PinCode, new { @class = "form-control", placeholder = "Enter PinCode" })
+                                @Html.ValidationMessageFor(x => x.PinCode, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.NetAmount, "Enter NetAmount:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.NetAmount, new { @class = "form-control", placeholder = "Enter NetAmount" })
+                                @Html.ValidationMessageFor(x => x.NetAmount, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.UserID, "Select UserName:", new { @class = "form - label fw-bold" })
+                                <select class="form-control" asp-for="UserID">
+                                    <option value="">Select User</option>
+                                    @foreach (var user in ViewBag.UserList)
+                                    {
+                                        <option value="@user.UserID">@user.UserName</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(x => x.UserID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-teal px-4 py-2">Submit</button>
+                                <a asp-controller="Customer" asp-action="CustomerList" class="btn btn-secondary px-4 py-2">
+                                    Back
+                                </a>
+                            </div>
+                        }
+                        <!-- End General Form Elements -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+<script type="text/javascript">
+    function confirmAddEdit() {
+        return confirm("Are you sure you want to add/edit this customer?");
+    }
+</script>
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,121 @@
+﻿@model BillsModel
+
+<style>
+    .text-teal {
+        color: #20c997 !important; /* Teal color */
+    }
+
+    .bg-teal {
+        background-color: #20c997 !important; /* Teal color */
+    }
+
+    .btn-teal {
+        background-color: #20c997;
+        border-color: #20c997;
+    }
+
+        .btn-teal:hover {
+            background-color: #1aab91;
+            border-color: #1aab91;
+        }
+</style>
+
+<main id="main" class="main bg-light">
+
+    <div class="pagetitle">
+        <h1 class="text-center text-teal">Bill Form</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card border-light shadow-lg">
+                    <div class="card-header bg-teal text-white">
+                        <h5 class="card-title">Bill Details</h5>
+                    </div>
+                    <div class="card-body bg-white">
+                        <!-- General Form Elements -->
+                        @using (Html.BeginForm("BillSave", "Bills", FormMethod.Post, new { onsubmit = "return confirmAddEdit();" }))
+                        {
+                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                            @Html.HiddenFor(x => x.BillID)
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.BillNumber, "Enter BillNumber:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.BillNumber, new { @class = "form-control", placeholder = "Enter BillNumber" })
+                                @Html.ValidationMessageFor(x => x.BillNumber, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.BillDate, "Enter BillDate:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.BillDate, new { @class = "form-control", placeholder = "Enter BillDate" })
+                                @Html.ValidationMessageFor(x => x.BillDate, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.TotalAmount, "Enter TotalAmount:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.TotalAmount, new { @class = "form-control", placeholder = "Enter TotalAmount" })
+                                @Html.ValidationMessageFor(x => x.TotalAmount, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.Discount, "Enter Discount:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.Discount, new { @class = "form-control", placeholder = "Enter Discount" })
+                                @Html.ValidationMessageFor(x => x.Discount, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.NetAmount, "Enter NetAmount:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.NetAmount, new { @class = "form-control", placeholder = "Enter NetAmount" })
+                                @Html.ValidationMessageFor(x => x.NetAmount, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.UserID, "Select UserName:", new { @class = "form-label fw-bold" })
+                                <select class="form-control" asp-for="UserID">
+                                    <option value="">Select User</option>
+                                    @foreach (var user in ViewBag.UserList)
+                                    {
+                                        <option value="@user.UserID">@user.UserName</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(x => x.UserID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.OrderID, "Select OrderID:", new { @class = "form-label fw-bold" })
+                                <select class="form-control" asp-for="OrderID">
+                                    <option value="">Select Order ID</option>
+                                    @foreach (var order in ViewBag.OrderList)
+                                    {
+                                        <option value="@order.OrderID">@order.OrderID</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(x => x.OrderID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-teal px-4 py-2">Submit</button>
+                                <a asp-controller="Bills" asp-action="BillsDetail" class="btn btn-secondary px-4 py-2">
+                                    Back
+                                </a>
+                            </div>
+                        }
+                        <!-- End General Form Elements -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+<script type="text/javascript">
+    function confirmAddEdit() {
+        return confirm("Are you sure you want to add/edit this Bill?");
+    }
+</script>
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

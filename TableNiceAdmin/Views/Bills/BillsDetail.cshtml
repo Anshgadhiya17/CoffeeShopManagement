@@ -1,0 +1,109 @@
+﻿@model DataTable;
+@using System.Data;
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-9">
+                                <h5 class="card-title text-center">Bill Table</h5>
+                            </div>
+                            <div class="col text-end">
+                                <a asp-controller="Bills" asp-action="AddBill" class="btn btn-primary mt-3">
+                                    <i class="bi bi-plus-circle"></i> Add Bill
+                                </a>
+                            </div>
+                        </div>
+
+                        @if (@TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show " role="alert">
+                                <h5 class="text-danger">@TempData["ErrorMessage"]</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" area-label="close"></button>
+
+                            </div>
+
+                        }
+
+                        <!-- Default Table -->
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col" class="text-center">BillID</th>
+                                    <th scope="col" class="text-center">BillNumber</th>
+                                    <th scope="col" class="text-center">BillDate</th>
+                                    <th scope="col" class="text-center">OrderID</th>
+                                    <th scope="col" class="text-center">TotalAmount</th>
+                                    <th scope="col" class="text-center">Discount</th>
+                                    <th scope="col" class="text-center">NetAmount</th>
+                                    <th scope="col" class="text-center">UserName</th>
+                                    <th scope="col" class="text-center">Update</th>
+                                    <th scope="col" class="text-center">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (DataRow dataRow in Model.Rows)
+                                {
+                                    <tr>
+                                        <td class="border-2 text-center">
+                                            @dataRow["BillID"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["BillNumber"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["BillDate"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["OrderID"]
+                                        </td>
+                                        <td class="border-2 text-end">
+                                            @dataRow["TotalAmount"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["Discount"]
+                                        </td>
+                                        <td class="border-2 text-end">
+                                            @dataRow["NetAmount"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            @dataRow["UserName"]
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            <a asp-controller="Bills" asp-action="AddBill" asp-route-BillID="@dataRow["BillID"]" class="btn btn-warning">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+                                        <td class="border-2 text-center">
+                                            <form method="post" asp-controller="Bills" asp-action="BillDelete">
+                                                <input type="hidden" name="BillID" value="@dataRow["BillID"]" />
+                                                <button type="submit" class="btn btn-danger" onclick="return confirmDelete()">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <!-- End Default Table Example -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+
+<script type="text/javascript">
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this Bill?");
+    }
+</script>

@@ -1,0 +1,150 @@
+﻿@model CityModel
+
+<style>
+    .text-teal {
+        color: #20c997 !important; /* Teal color */
+    }
+
+    .bg-teal {
+        background-color: #20c997 !important; /* Teal color */
+    }
+
+    .btn-teal {
+        background-color: #20c997;
+        border-color: #20c997;
+    }
+
+        .btn-teal:hover {
+            background-color: #1aab91;
+            border-color: #1aab91;
+        }
+</style>
+
+<main id="main" class="main bg-light">
+
+    <div class="pagetitle">
+        <h1 class="text-center text-teal">City Form</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card border-light shadow-lg">
+                    <div class="card-header bg-teal text-white">
+                        <h5 class="card-title">City Details</h5>
+                    </div>
+                    <div class="card-body bg-white">
+                        <!-- General Form Elements -->
+                        @using (Html.BeginForm("CitySave", "City", FormMethod.Post))
+                        {
+                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                            @* @Html.HiddenFor(Model => Model.CityID) *@
+                            <input type="hidden" asp-for="CityID" value="@Model.CityID" />
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.CityName, "Enter CityName:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.CityName, new { @class = "form-control", placeholder = "Enter CityName" })
+                                @Html.ValidationMessageFor(x => x.CityName, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.CityCode, "Enter CityCode:", new { @class = "form-label fw-bold" })
+                                @Html.TextBoxFor(x => x.CityCode, new { @class = "form-control", placeholder = "Enter CityCode" })
+                                @Html.ValidationMessageFor(x => x.CityCode, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.CountryID, "Select Country:", new { @class = "form-label fw-bold" })
+                                <select class="form-control" asp-for="CountryID">
+                                    <option value="">Select Country </option>
+                                    @foreach (var country in ViewBag.CountryList)
+                                    {
+                                        <option value="@country.CountryID">@country.CountryName</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(x => x.CountryID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="mb-3">
+                                @Html.LabelFor(x => x.StateID, "Select State:", new { @class = "form-label fw-bold" })
+                                <select class="form-control" asp-for="StateID">
+                                    <option value="">Select State</option>
+                                    @if (ViewBag.StateList != null)
+                                    {
+                                        foreach (var state in
+                                        ViewBag.StateList)
+                                        {
+                                            if (state.StateID == Model.StateID)
+                                            {
+                                                <option value="@state.StateID">@state.StateName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@state.StateID">@state.StateName</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(x => x.StateID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-teal px-4 py-2" onclick="return confirmAddEdit()">Submit</button>
+                                <a asp-controller="City" asp-action="CityDetail" class="btn btn-secondary px-4 py-2">
+                                    Back
+                                </a>
+                            </div>
+                        }
+                        <!-- End General Form Elements -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    },
+    <script>
+        $(document).ready(function () {
+            $("#CountryID").change(function () {
+                var countryId = $(this).val();
+                if (countryId) {
+                    $.ajax({
+                        url: '@Url.Action("GetStatesByCountry", "City")',
+                        type: "POST", // Changed to POST
+                        data: { CountryID: countryId }, // Use 'CountryID' to match controller
+                        success: function (data) {
+                            $("#StateID")
+                                .empty()
+                                .append('<option value="">Select State</option>');
+                            $.each(data, function (i, state) {
+                                $("#StateID").append(
+                                    '<option value="' +
+                                    state.stateID +
+                                    '">' +
+                                    state.stateName +
+                                    "</option>"
+                                );
+                            });
+                            console.log(state.stateID);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        },
+                    });
+                } else {
+                    $("#StateID").empty().append('<option value="">Select State</option>');
+                }
+            });
+        });
+    </script>
+}
+
+<script type="text/javascript">
+    function confirmAddEdit() {
+        return confirm("Are you sure you want to Add/Edit this City?");
+    }
+</script>
